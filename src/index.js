@@ -1,48 +1,43 @@
-var rpio = require('rpio'); //define uso do rpio
-const request = require('request');
-const { sleep } = require('rpio');
+var rpio = require('rpio') //define uso do rpio
+const request = require('request')
+const { sleep } = require('rpio')
  
-// configura pinos botão e LED
-BTN = 32;
+// configura os pinos do botao, LDR e LED
+LDR = 7
+LED = 23
+BTN = 32
+
+// configura o botao como entrada e LED como saida
+rpio.open(BTN, rpio.INPUT, rpio.PULL_UP)
+rpio.open(LED, rpio.OUTPUT, rpio.LOW)
  
-// configura botao como entrada e LED como saida
-rpio.open(BTN, rpio.INPUT, rpio.PULL_UP);
- 
-// inicializa variáveis para controle do LED e botao
-var btnState = 0;
-var ledState = 1;
-var btnLock = 0;
-
-function recycling(count) {
-   const path = `http://35.215.197.50:8181/recycling?count=${count}`
-
-   request(path, function (error, data, body){
-      console.log(body);
-   });
-}
-
-
-PIN_LDR = 7
-LED_LDR = 23
-
-rpio.open(LED_LDR, rpio.OUTPUT, rpio.LOW)
+// inicializa variáveis para o controle
+var btnState = 0
+var btnLock = 1
 
 var limiar = 1000
-var ldrCount = 0
 var countLata = 0
 
 var livreOld = false
 var livreNew = true
 var on = true
 
+// request para registrar os pontos e gerar o QRCode
+function recycling(count) {
+   const path = `http://35.215.197.50:8181/recycling?count=${count}`
+
+   request(path, function (error, data, body){
+      console.log(body)
+   });
+}
+
 setInterval(function() {
-   btnState = rpio.read(BTN)
+   btnState = rpio.read(BTN) // le o botao
 
    if(btnState == 0 && btnLock == 0) {
-      ledState = !ledState
       btnLock = 1
 
-      recycling(countLata)
+      recycling(countLata) // faz a request para obter o QRCode com o contador atual
       countLata = 0
    }
  
@@ -50,29 +45,29 @@ setInterval(function() {
        btnLock = 0
    }
 
-   ldrCount = 0
-   rpio.open(PIN_LDR, rpio.OUTPUT, rpio.LOW);
+   // gerencia a leitura do LDR
+   rpio.open(LDR, rpio.OUTPUT, rpio.LOW)
    sleep(0.1)
-   rpio.open(PIN_LDR, rpio.INPUT);
+   rpio.open(LDR, rpio.INPUT)
 
-   while ((rpio.read(PIN_LDR) == 0) && (ldrCount < (limiar * 2))) {
+   var ldrCount = 0
+   while ((rpio.read(LDR) == 0) && (ldrCount < (limiar * 2))) {
       ldrCount += 1
    }
 
+   // gerencia a troca de estados para o contador
    livreNew = (ldrCount < limiar)
 
    if (livreOld != livreNew) {
 
       livreOld = livreNew
       on = !on
-      on ? rpio.write(LED_LDR, rpio.HIGH) : rpio.write(LED_LDR, rpio.LOW)
+      on ? rpio.write(LED, rpio.HIGH) : rpio.write(LED, rpio.LOW)
       
       if (on) {
          countLata += 1
-         console.log("LATAS: " + countLata);
+         console.log("LATAS: " + countLata)
       }
-
-      console.log("ON: " + on)
    }
 
    // console.log(ldrCount);
