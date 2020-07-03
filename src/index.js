@@ -70,7 +70,7 @@ setInterval(function() {
 
    livreNew = (ldrCount < limiar)
 
-   if (livreAux != livreNew) {
+   if (livreOld != livreNew) {
       on = !on
       livreOld = livreNew
    }
