@@ -27,7 +27,7 @@ function recycling(count) {
    const path = `http://35.215.197.50:8181/recycling?count=${count}`
 
    request(path, function (error, data, body){
-      console.log(body)
+      console.log("QRCode: " + body)
    });
 }
 
@@ -66,7 +66,7 @@ setInterval(function() {
       
       if (on) {
          countLata += 1
-         console.log("LATAS: " + countLata)
+         // console.log("LATAS: " + countLata)
       }
    }
 
