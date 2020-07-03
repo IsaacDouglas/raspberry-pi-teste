@@ -66,10 +66,9 @@ setInterval(function() {
       
       if (on) {
          countLata += 1
-         // console.log("LATAS: " + countLata)
+         console.log("LATAS: " + countLata)
       }
    }
-
-   // console.log(ldrCount);
+   
 }, 10);
 
