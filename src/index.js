@@ -15,7 +15,7 @@ rpio.open(LED, rpio.OUTPUT, rpio.LOW)
 var btnState = 0
 var btnLock = 1
 
-var limiar = 1000
+var limiar = 3000
 var countLata = 0
 
 var livreOld = false
