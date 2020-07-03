@@ -53,14 +53,12 @@ var count2 = 0
 pin_to_circuit = 7
 BUZZER = 23
 
+rpio.open(BUZZER, rpio.OUTPUT, rpio.LOW)
+
 setInterval(function() {
-
-   rpio.open(BUZZER, rpio.OUTPUT, rpio.LOW)
-
    count2 = 0
    rpio.open(pin_to_circuit, rpio.OUTPUT, rpio.LOW);
    sleep(0.1)
-
    rpio.open(pin_to_circuit, rpio.INPUT);
 
    while (rpio.read(pin_to_circuit) == 0) {
@@ -71,8 +69,9 @@ setInterval(function() {
       countLata += 1
       console.log("printlata " + countLata)
       rpio.write(BUZZER, rpio.HIGH)
-      sleep(2)
+      sleep(0.2)
+      rpio.write(BUZZER, rpio.LOW)
    }
    console.log(count2);
-}, 50);
+}, 20);
 
