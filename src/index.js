@@ -51,8 +51,12 @@ var count2 = 0
 // var countLata = 0
 
 pin_to_circuit = 7
+BUZZER = 23
 
 setInterval(function() {
+
+   rpio.open(BUZZER, rpio.OUTPUT, rpio.LOW)
+
    count2 = 0
    rpio.open(pin_to_circuit, rpio.OUTPUT, rpio.LOW);
    sleep(0.1)
@@ -66,7 +70,8 @@ setInterval(function() {
    if (count2 >= limiar) {
       countLata += 1
       console.log("printlata " + countLata)
-      sleep(1)
+      rpio.write(BUZZER, rpio.HIGH)
+      sleep(2)
    }
    console.log(count2);
 }, 50);
