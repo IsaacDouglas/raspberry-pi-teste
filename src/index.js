@@ -53,6 +53,11 @@ LED_LDR = 23
 
 rpio.open(LED_LDR, rpio.OUTPUT, rpio.LOW)
 
+var livreOld = false
+var livreNew = true
+
+var on = true
+
 setInterval(function() {
    ldrCount = 0
    rpio.open(PIN_LDR, rpio.OUTPUT, rpio.LOW);
@@ -63,13 +68,21 @@ setInterval(function() {
       ldrCount += 1
    }
 
-   if (ldrCount >= limiar) {
+   livreNew = (ldrCount < limiar)
+
+   if (livreAux != livreNew) {
+      on = !on
+      livreOld = livreNew
+   }
+
+   if (on) {
       countLata += 1
       rpio.write(LED_LDR, rpio.HIGH)
       sleep(0.2)
       rpio.write(LED_LDR, rpio.LOW)
       console.log("QUANTIDADE: " + countLata)
    }
+   
    console.log(ldrCount);
 }, 10);
 
