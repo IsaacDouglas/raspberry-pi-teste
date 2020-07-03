@@ -15,28 +15,26 @@ var btnState = 0;
 var ledState = 1;
 var btnLock = 0;
 var count = 0;
-
-var countLata = 0
  
-setInterval(function() {
-   btnState = rpio.read(BTN) // le botao
+// setInterval(function() {
+//    btnState = rpio.read(BTN) // le botao
     
-   // trata o estado do botao e controla o LED de acordo
-   if(btnState == 0 && btnLock == 0) {
-       ledState = !ledState;
-       ledState ? rpio.write(LED, rpio.LOW) : rpio.write(LED, rpio.HIGH);    
-       btnLock = 1;
+//    // trata o estado do botao e controla o LED de acordo
+//    if(btnState == 0 && btnLock == 0) {
+//        ledState = !ledState;
+//        ledState ? rpio.write(LED, rpio.LOW) : rpio.write(LED, rpio.HIGH);    
+//        btnLock = 1;
 
-       console.log('LED1: ' + (ledState ? '0' : '1')); // escreve estado do LED no console
-       count += 1;
-       countLata = 0
-       recycling(count)
-   }
+//        console.log('LED1: ' + (ledState ? '0' : '1')); // escreve estado do LED no console
+//        count += 1;
+//        countLata = 0
+//        recycling(count)
+//    }
  
-   if(btnState == 1 && btnLock == 1) {
-       btnLock = 0
-   }
-}, 50);
+//    if(btnState == 1 && btnLock == 1) {
+//        btnLock = 0
+//    }
+// }, 50);
 
 function recycling(count) {
    const path = `http://35.215.197.50:8181/recycling?count=${count}`
@@ -47,31 +45,32 @@ function recycling(count) {
 }
 
 var limiar = 1000
-var count2 = 0
-// var countLata = 0
+var ldrCount = 0
+var countLata = 0
 
-pin_to_circuit = 7
-BUZZER = 23
+PIN_LDR = 7
+LED_LDR = 23
 
-rpio.open(BUZZER, rpio.OUTPUT, rpio.LOW)
+rpio.open(LED_LDR, rpio.OUTPUT, rpio.LOW)
 
 setInterval(function() {
-   count2 = 0
-   rpio.open(pin_to_circuit, rpio.OUTPUT, rpio.LOW);
+   ldrCount = 0
+   rpio.open(PIN_LDR, rpio.OUTPUT, rpio.LOW);
    sleep(0.1)
-   rpio.open(pin_to_circuit, rpio.INPUT);
+   rpio.open(PIN_LDR, rpio.INPUT);
 
-   while (rpio.read(pin_to_circuit) == 0) {
-      count2 += 1
+   let ldr = rpio.read(PIN_LDR)
+   while ((ldr == 0) && (ldrCount < (limiar * 2))) {
+      ldrCount += 1
    }
 
-   if (count2 >= limiar) {
+   if (ldrCount >= limiar) {
       countLata += 1
-      console.log("printlata " + countLata)
-      rpio.write(BUZZER, rpio.HIGH)
+      rpio.write(LED_LDR, rpio.HIGH)
       sleep(0.2)
-      rpio.write(BUZZER, rpio.LOW)
+      rpio.write(LED_LDR, rpio.LOW)
+      console.log("QUANTIDADE: " + countLata)
    }
-   console.log(count2);
-}, 20);
+   console.log(ldrCount);
+}, 10);
 
