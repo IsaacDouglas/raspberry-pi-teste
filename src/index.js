@@ -51,7 +51,7 @@ setInterval(function() {
    rpio.open(LDR, rpio.INPUT)
 
    var ldrCount = 0
-   while ((rpio.read(LDR) == 0) && (ldrCount < (limiar * 2))) {
+   while ((rpio.read(LDR) == 0) && (ldrCount < (limiar * 3))) {
       ldrCount += 1
    }
 
@@ -69,6 +69,7 @@ setInterval(function() {
          console.log("LATAS: " + countLata)
       }
    }
-   
+
+   console.log("LDR COUNT: " + ldrCount)
 }, 10);
 
