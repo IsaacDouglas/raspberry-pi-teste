@@ -46,6 +46,7 @@ function recycling(count) {
 var count2 = 0
 pin_to_circuit = 7
 setInterval(function() {
+   count2 = 0
    rpio.open(pin_to_circuit, rpio.OUTPUT, rpio.LOW);
    sleep(0.1)
 
