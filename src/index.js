@@ -59,8 +59,7 @@ setInterval(function() {
    sleep(0.1)
    rpio.open(PIN_LDR, rpio.INPUT);
 
-   let ldr = rpio.read(PIN_LDR)
-   while ((ldr == 0) && (ldrCount < (limiar * 2))) {
+   while ((rpio.read(PIN_LDR) == 0) && (ldrCount < (limiar * 2))) {
       ldrCount += 1
    }
 
