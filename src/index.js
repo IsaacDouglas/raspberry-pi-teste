@@ -1,4 +1,5 @@
 var rpio = require('rpio'); //define uso do rpio
+const request = require('request');
  
 // configura pinos botão e LED
 BTN = 32;
@@ -12,6 +13,7 @@ rpio.open(LED, rpio.OUTPUT, rpio.LOW);
 var btnState = 0;
 var ledState = 1;
 var btnLock = 0;
+var count = 0;
  
 setInterval(function() {
    btnState = rpio.read(BTN) // le botao
@@ -21,10 +23,21 @@ setInterval(function() {
        ledState = !ledState;
        ledState ? rpio.write(LED, rpio.LOW) : rpio.write(LED, rpio.HIGH);    
        btnLock = 1;
+
+       console.log('LED1: ' + (ledState ? '0' : '1')); // escreve estado do LED no console
+       count += 1;
+       recycling(count)
    }
  
    if(btnState == 1 && btnLock == 1) {
        btnLock = 0
    }
-   console.log('LED1: ' + (ledState ? '0' : '1')); // escreve estado do LED no console
 }, 50);
+
+function recycling(count) {
+   const path = `http://35.215.197.50:8181/recycling?count=${count}`
+
+   request(path, function (error, data, body){
+      console.log(body);
+   });
+}
