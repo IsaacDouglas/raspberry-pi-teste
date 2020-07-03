@@ -1,5 +1,6 @@
 var rpio = require('rpio'); //define uso do rpio
 const request = require('request');
+const { sleep } = require('rpio');
  
 // configura pinos botão e LED
 BTN = 32;
@@ -41,3 +42,18 @@ function recycling(count) {
       console.log(body);
    });
 }
+
+var count2 = 0
+pin_to_circuit = 7
+setInterval(function() {
+   rpio.open(pin_to_circuit, rpio.OUTPUT, rpio.LOW);
+   sleep(0.1)
+
+   rpio.open(pin_to_circuit, rpio.INPUT);
+
+   while (rpio.read(pin_to_circuit) == 0) {
+      count2 += 1
+   }
+   console.log(count2);
+}, 100);
+
