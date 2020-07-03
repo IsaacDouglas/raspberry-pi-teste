@@ -73,14 +73,13 @@ setInterval(function() {
    if (livreOld != livreNew) {
       on = !on
       livreOld = livreNew
+      console.log("ON: " + on)
    }
 
    if (on) {
-      countLata += 1
       rpio.write(LED_LDR, rpio.HIGH)
-      sleep(0.2)
+   } else {
       rpio.write(LED_LDR, rpio.LOW)
-      console.log("QUANTIDADE: " + countLata)
    }
    
    console.log(ldrCount);
