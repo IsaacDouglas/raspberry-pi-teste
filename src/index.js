@@ -56,5 +56,5 @@ setInterval(function() {
       count2 += 1
    }
    console.log(count2);
-}, 100);
+}, 50);
 
