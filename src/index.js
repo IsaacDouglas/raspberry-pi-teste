@@ -62,19 +62,19 @@ setInterval(function() {
    livreNew = (ldrCount < limiar)
 
    if (livreOld != livreNew) {
-      on = !on
+
       livreOld = livreNew
+      on = !on
+      on ? rpio.write(LED_LDR, rpio.HIGH) : rpio.write(LED_LDR, rpio.LOW)
+      
+      if (on) {
+         countLata += 1
+         console.log("LATAS: " + countLata);
+      }
+
       console.log("ON: " + on)
    }
 
-   if (on) {
-      countLata += 1
-      console.log("LATAS: " + countLata);
-      rpio.write(LED_LDR, rpio.HIGH)
-   } else {
-      rpio.write(LED_LDR, rpio.LOW)
-   }
-   
    // console.log(ldrCount);
 }, 10);
 
