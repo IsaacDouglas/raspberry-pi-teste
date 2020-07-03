@@ -1,21 +1,30 @@
 var rpio = require('rpio'); //define uso do rpio
  
-LED = 29 //define pino do LED
+// configura pinos botão e LED
+BTN = 32;
+LED = 29;
  
-var ledState = 0; //define estado do led
+// configura botao como entrada e LED como saida
+rpio.open(BTN, rpio.INPUT, rpio.PULL_UP);
+rpio.open(LED, rpio.OUTPUT, rpio.LOW);
  
-rpio.open(LED, rpio.OUTPUT, rpio.LOW); //define LED como output
- 
-setInterval(function() {
-   ledState = !ledState; //troca estado do led
-   if(ledState == 0) rpio.write(LED, rpio.HIGH); //acende LED
-   else rpio.write(LED, rpio.LOW); //apaga LED
-}, 1000); //configura intervalo de 1000 ms
-
-BTN = 32; //define pino da chave 
- 
-rpio.open(BTN, rpio.INPUT, rpio.PULL_UP); //configura botao como input
+// inicializa variáveis para controle do LED e botao
+var btnState = 0;
+var ledState = 1;
+var btnLock = 0;
  
 setInterval(function() {
-   console.log('Button State: ' + (rpio.read(BTN) ? 'OFF' : 'ON')); //escreve no console estado do botao
-}, 10); //configura intervalo de 10 ms para leitura
+   btnState = rpio.read(BTN) // le botao
+    
+   // trata o estado do botao e controla o LED de acordo
+   if(btnState == 0 && btnLock == 0) {
+       ledState = !ledState;
+       ledState ? rpio.write(LED, rpio.LOW) : rpio.write(LED, rpio.HIGH);    
+       btnLock = 1;
+   }
+ 
+   if(btnState == 1 && btnLock == 1) {
+       btnLock = 0
+   }
+   console.log('LED1: ' + (ledState ? '0' : '1')); // escreve estado do LED no console
+}, 50);
