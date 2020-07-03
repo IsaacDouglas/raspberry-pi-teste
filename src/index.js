@@ -15,6 +15,8 @@ var btnState = 0;
 var ledState = 1;
 var btnLock = 0;
 var count = 0;
+
+var countLata = 0
  
 setInterval(function() {
    btnState = rpio.read(BTN) // le botao
@@ -27,6 +29,7 @@ setInterval(function() {
 
        console.log('LED1: ' + (ledState ? '0' : '1')); // escreve estado do LED no console
        count += 1;
+       countLata = 0
        recycling(count)
    }
  
@@ -43,8 +46,12 @@ function recycling(count) {
    });
 }
 
+var limiar = 1000
 var count2 = 0
+// var countLata = 0
+
 pin_to_circuit = 7
+
 setInterval(function() {
    count2 = 0
    rpio.open(pin_to_circuit, rpio.OUTPUT, rpio.LOW);
@@ -54,6 +61,12 @@ setInterval(function() {
 
    while (rpio.read(pin_to_circuit) == 0) {
       count2 += 1
+   }
+
+   if (count2 >= limiar) {
+      countLata += 1
+      console.log("printlata " + countLata)
+      sleep(1)
    }
    console.log(count2);
 }, 50);
