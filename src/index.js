@@ -36,9 +36,10 @@ function recycling(count) {
       client.publish('megahack3/info', JSON.stringify(JSON.stringify({ "latas": `${count}`, "qrcode": body })))
    });
    
-   rpio.write(LED, rpio.HIGH)
+
+   on ? rpio.write(LED, rpio.LOW) : rpio.write(LED, rpio.HIGH)
    sleep(0.1)
-   rpio.write(LED, rpio.LOW)
+   on ? rpio.write(LED, rpio.HIGH) : rpio.write(LED, rpio.LOW)
 }
 
 setInterval(function() {
