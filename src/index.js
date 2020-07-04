@@ -33,7 +33,7 @@ function recycling(count) {
 
    request(path, function (error, data, body){
       console.log("QRCode: " + body)
-      client.publish('megahack3/qrcode', JSON.stringify({ "latas": count, "qrcode": body }))
+      client.publish('megahack3/info', JSON.stringify(JSON.stringify({ "latas": `${count}`, "qrcode": body })))
    });
 }
 
@@ -73,7 +73,7 @@ setInterval(function() {
       if (on) {
          countLata += 1
          console.log("LATAS: " + countLata)
-         client.publish('megahack3/latas', JSON.stringify({ "latas": countLata }))
+         client.publish('megahack3/info', JSON.stringify(JSON.stringify({ "latas": `${countLata}` })))
       }
    }
 
@@ -81,13 +81,7 @@ setInterval(function() {
 }, 10);
 
 client.on('connect', function () {
-   client.subscribe('megahack3/teste', function (err) {
-     if (!err) {
-       client.publish('megahack3/teste', "HELLO WORLD!!!" )
-     }
-   })
-   client.subscribe('megahack3/latas')
-   client.subscribe('megahack3/qrcode')
+   client.subscribe('megahack3/info')
  })
   
 client.on('message', function (topic, message) {
