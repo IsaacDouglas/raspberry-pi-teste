@@ -35,6 +35,10 @@ function recycling(count) {
       console.log("QRCode: " + body)
       client.publish('megahack3/info', JSON.stringify(JSON.stringify({ "latas": `${count}`, "qrcode": body })))
    });
+   
+   rpio.write(LED, rpio.HIGH)
+   sleep(0.1)
+   rpio.write(LED, rpio.LOW)
 }
 
 setInterval(function() {
