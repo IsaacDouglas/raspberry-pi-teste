@@ -73,7 +73,7 @@ setInterval(function() {
       if (on) {
          countLata += 1
          console.log("LATAS: " + countLata)
-         client.publish('megahack3/latas', countLata)
+         client.publish('megahack3/latas', `${countLata}`)
       }
    }
 
