@@ -1,3 +1,8 @@
+// libs para o envio da informacao por mqtt
+const mqtt = require('mqtt')
+var client = mqtt.connect('mqtt://test.mosquitto.org')
+
+// libs para o hardware
 var rpio = require('rpio') //define uso do rpio
 const request = require('request')
 const { sleep } = require('rpio')
@@ -28,6 +33,7 @@ function recycling(count) {
 
    request(path, function (error, data, body){
       console.log("QRCode: " + body)
+      client.publish('megahack3/qrcode', body)
    });
 }
 
@@ -67,9 +73,25 @@ setInterval(function() {
       if (on) {
          countLata += 1
          console.log("LATAS: " + countLata)
+         client.publish('megahack3/latas', countLata)
       }
    }
 
    console.log("LDR COUNT: " + ldrCount)
 }, 10);
 
+client.on('connect', function () {
+   client.subscribe('megahack3/teste', function (err) {
+     if (!err) {
+       client.publish('megahack3/teste', "HELLO WORLD!!!" )
+     }
+   })
+   client.subscribe('megahack3/latas')
+   client.subscribe('megahack3/qrcode')
+ })
+  
+client.on('message', function (topic, message) {
+   // message is Buffer
+   console.log(topic.toString() + " - " + message.toString())
+   // client.end()
+})
